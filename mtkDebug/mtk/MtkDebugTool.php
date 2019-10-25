@@ -72,15 +72,28 @@ class MtkDebugTool{
      * 打印当前执行的php文件
      */
     public function debugExecutePhpFile(){
-        fwrite($this->debugFile,"EPF:".print_r($_SERVER['PHP_SELF'],true)."-------------ET:".date("Y-m-d H:i:s")."\n");
+        fwrite($this->debugFile,"<p>EPF:".print_r($_SERVER['PHP_SELF'],true)."-------------ET:".date("Y-m-d H:i:s")."</p><br>");
     }
 
     /**
      * 打印一个变量
-     * @param mixed $var 需要打印的变量
+     * @param mixed $args 需要打印的变量,最后一个参数可以为标识，不加也可以
      */
-    public function debugVar($var){
-        fwrite($this->debugFile,"var:".print_r($var,true)."*mtk*\n");
+    public function debugVar($args){
+        $args = func_get_args();
+        $content = '<p><pre>';
+        $count = 0;
+        if(($count = count($args)) == 1){
+            $content .= "****var-noname:\n";
+        }else{
+            $content .= (gettype($args[$count - 1]) == string) ? "****var-".$args[$count - 1].":\n" : "****var-nonameCollection:\n";
+        }
+        array_pop($args);
+        foreach($args as $arg){
+            $content .= print_r($arg,true)."\n"; 
+        }
+        $content .= "</pre></p>";
+        fwrite($this->debugFile,$content);
     }
 
     /**
@@ -88,17 +101,17 @@ class MtkDebugTool{
      * @param boolean $needDetail 需不需要展现细节，即展开array和object
      */
     public function debugBackTrace($needDetail = false){
-        fwrite($this->debugFile,"\nmtk back trace------------------------------------\n\n");
+        fwrite($this->debugFile,"<p>mtk back trace------------------------------------<br><br>");
         $debugInfo = debug_backtrace();
         if(isset($debugInfo) && count($debugInfo) > 1){
             array_shift($debugInfo);
             if(!$needDetail){
                 self::getSimpleArrInfo($debugInfo);
             }  
-            fwrite($this->debugFile,print_r($debugInfo,true)."\n**************************************mtk back trace\n\n");//mtk TODO
+            fwrite($this->debugFile,print_r($debugInfo,true)."<br>**************************************mtk back trace<br><br></p>");//mtk TODO
             return ;
         }
-        fwrite($this->debugFile,"无调用记录"."*mtk*\n");//mtk TODO
+        fwrite($this->debugFile,"无调用记录"."*mtk*<br>");//mtk TODO
     }
     
     /**
@@ -176,7 +189,7 @@ class MtkDebugTool{
                 }
                 $semicolonIndex = 0;
                 if(($semicolonIndex = strpos($str , ';' ,$index+strlen($functionName.'::')) ) === false ) throw new \Exception("该行中找不到结束标志，请查看函数的使用是否符合规则");
-                $str = substr_replace($str , '' , $index , $semicolonIndex - $index + 1);
+                $str = substr_replace($str , '' , 0, $semicolonIndex + 1);
                 fwrite($modFile , $str);
             }
             fflush($modFile);   
