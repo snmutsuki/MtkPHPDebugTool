@@ -86,9 +86,8 @@ class MtkDebugTool{
         if(($count = count($args)) == 1){
             $content .= "****var-noname:\n";
         }else{
-            $content .= (gettype($args[$count - 1]) == string) ? "****var-".$args[$count - 1].":\n" : "****var-nonameCollection:\n";
-        }
-        array_pop($args);
+            $content .= (gettype($args[$count - 1]) == string) ? "****var-".array_pop($args).":\n" : "****var-nonameCollection:\n";
+        }      
         foreach($args as $arg){
             $content .= print_r($arg,true)."\n"; 
         }

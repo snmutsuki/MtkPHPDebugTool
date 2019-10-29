@@ -34,21 +34,10 @@ p{font-size:16px;line-height:20px;margin-top:20px;}
 <script src="http://mutsuki.cn:8080/SpringWebPro/Resource/js/jquery.min.js"></script>
 <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script type="text/javascript">
-	const ajaxPromise = params => new Promise((resovle,reject) => {
-		$.ajax({
-				type: params.type || "get",//方法类型
-				dataType: params.dataType || "string",//预期服务器返回的数据类型
-				url: params.url,
-				contentType: "charset=utf-8",
-				data: JSON.stringify(params.sendData) || "",
-				success: res => {resovle(res);},
-				error : err => {reject(err);}
-		});
-  	});;
+
 	function getDebug(){
-		if(!mode) return;		
-		ajaxPromise({type : "get" , dataType : "string" , url : "http://localhost:8088/mtkDebug/mtk.php/readDebug"}).then(res => {
-  		 }).catch(err =>$("#debug_div").html(err.responseText));
+		if(!mode) return;
+		fetch("http://localhost:8088/mtkDebug/mtk.php/readDebug").then(response => response.text()).then(text=> $("#debug_div").html(text)).catch(error => alert(error));
 	}
 
 	function getDebugLog(){
@@ -57,20 +46,16 @@ p{font-size:16px;line-height:20px;margin-top:20px;}
 	}
 
 	function clearAll(){
-		ajaxPromise({type : "get" , dataType : "string" , url : "http://localhost:8088/mtkDebug/mtk.php/refreshDebug"}).then(res => {
-  		 }).catch(err => void(0));
-		$("#debug_div").html("");
+		fetch("http://localhost:8088/mtkDebug/mtk.php/refreshDebug").then(response => $("#debug_div").html("")).catch(error => alert(error));		
 	}
 
 	function showChangedFiles(){
 		mode = 0;
-		ajaxPromise({type : "get" , dataType : "string" , url : "http://localhost:8088/mtkDebug/mtk.php/showChangedFiles"}).then(res => {
-  		 }).catch(err =>$("#debug_div").html(err.responseText));
+		fetch("http://localhost:8088/mtkDebug/mtk.php/showChangedFiles").then(response => response.text()).then(text => $("#debug_div").html(text)).catch(error => alert(error));
 	}
 
 	function removeAllTag(){
-		ajaxPromise({type : "get" , dataType : "string" , url : "http://localhost:8088/mtkDebug/mtk.php/removeDebugTag"}).then(res => {
-  		 }).catch(err => void(0));
+		fetch("http://localhost:8088/mtkDebug/mtk.php/removeDebugTag").then(response => void(0)).catch(error => alert(error));
 	}
 
 	var timer=null;
