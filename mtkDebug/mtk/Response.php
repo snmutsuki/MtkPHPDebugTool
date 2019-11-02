@@ -25,7 +25,7 @@ class Response{
      * @param string $path
      */
     public static function createRenderResponse($path){
-        $instance = new Response('render',ROOT_DIR."/static/".$path."/index.html");
+        $instance = new Response('render',WEBSITE_NAME."static/".$path."/index.html");
         return $instance;
     }
 
@@ -53,8 +53,7 @@ class Response{
     }
 
     protected static function execRenderResponse($path){
-        $fileContent = file_get_contents($path);
-        echo $fileContent;
+        header("Location:$path");
     }
 
 }
