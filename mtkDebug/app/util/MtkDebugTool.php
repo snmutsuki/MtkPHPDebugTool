@@ -1,11 +1,11 @@
 <?php
-namespace mtk;
+namespace app\util;
 
 use ReflectionClass;
 use Think\Exception;
 
 class MtkDebugTool{
-    protected static $configPath = '/app/Config/mdebugConfig.php';
+    protected static $configPath = '/app/Config/mtk_debug_config.php';
     protected static $inited = false;
     protected static $debugRecord = [];
     protected static $mdebugPath = '';

@@ -1,6 +1,6 @@
 <?php
 
-namespace mtk;
+namespace mtk\lib;
 
 use Exception;
 
@@ -15,7 +15,7 @@ class MtkSftp{
     protected $localBaseDir = '';
 
     private function __construct(){
-        $config = include ROOT_DIR."/app/Config/MtkSftpConfig.php";
+        $config = include ROOT_DIR."/app/Config/mtk_sftp_config.php";
         $this->host = $config['HOST'];
         $this->port = $config['PORT'];
         $this->userName = $config['USER_NAME'];
